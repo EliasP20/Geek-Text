@@ -16,20 +16,22 @@ The system provides REST endpoints that handle business logic and data persisten
 
 ---
 
-## Project Structure
+### Project Structure
+
+```text
 Geek-Text-API/
 ├── app/
-│ ├── main.py
-│ ├── api/
-│ │ └── routers/
-│ ├── models/
-│ ├── schemas/
-│ └── services/
+│   ├── main.py
+│   ├── api/
+│   │   └── routers/
+│   ├── models/
+│   ├── schemas/
+│   └── services/
 ├── .gitignore
 ├── README.md
-├── requirements.txt
+└── requirements.txt
 
-
+```
 ---
 
 ## Running the Application
