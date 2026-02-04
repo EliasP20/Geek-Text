@@ -1,6 +1,9 @@
 from fastapi import FastAPI
+from app.api.routers.users import router as users_router
 
 app = FastAPI(title="Geek Text API")
+
+app.include_router(users_router)
 
 @app.get("/health")
 def health():
