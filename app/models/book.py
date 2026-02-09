@@ -1,14 +1,25 @@
-from sqlalchemy import Column, Integer, String, Float, DECIMAL
+from sqlalchemy import Column, Integer, String, Text, DECIMAL, ForeignKey
+from sqlalchemy.orm import relationship
+
 from .database import Base
 
 class Book(Base):
     __tablename__ = "books"
 
+    ratings = relationship("Rating", back_populates="book")
+
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String(255))
-    author = Column(String(255))
+    isbn = Column(String(20), nullable=False, unique=True)
+    title = Column(String(255), nullable=False)
+    description = Column(Text)
+    price = Column(DECIMAL(10, 2), nullable=False)
     genre = Column(String(100))
-    publisher = Column(String(255))
-    price = Column(DECIMAL(10, 2))
-    rating = Column(Float)
-    copies_sold = Column(Integer)
+    publisher = Column(String(100))
+    year_published = Column(Integer)
+    copies_sold = Column(Integer, default=0)
+
+    author_id = Column(
+        Integer,
+        ForeignKey("authors.id", ondelete="SET NULL"),
+        nullable=True
+    )
