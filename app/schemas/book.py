@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from pydantic import BaseModel
 from typing import Optional
 
@@ -6,7 +8,7 @@ class BookResponse(BaseModel):
     isbn: str
     title: str
     description: Optional[str]
-    price: float
+    price: Decimal
     genre: Optional[str]
     publisher: Optional[str]
     year_published: Optional[int]

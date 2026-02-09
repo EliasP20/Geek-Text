@@ -6,7 +6,7 @@ from .database import Base
 class Book(Base):
     __tablename__ = "books"
 
-    ratings = relationship("Rating", back_populates="book")
+
 
     id = Column(Integer, primary_key=True, index=True)
     isbn = Column(String(20), nullable=False, unique=True)
@@ -23,3 +23,7 @@ class Book(Base):
         ForeignKey("authors.id", ondelete="SET NULL"),
         nullable=True
     )
+
+    author = relationship("Author", back_populates="book")
+
+    ratings = relationship("Rating", back_populates="book")

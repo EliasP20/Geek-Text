@@ -1,5 +1,7 @@
+from decimal import Decimal
+
 from sqlalchemy.orm import Session
-from app.models.book import Book
+from app.models import Book, Author
 
 from sqlalchemy import func
 from app.models.rating import Rating
@@ -21,14 +23,26 @@ def get_top_sellers(db: Session):
     )
 
 def discount_books_by_publisher(db: Session, publisher: str, discount: float):
-    books = (
-        db.query(Book)
-        .filter(Book.publisher == publisher)
-        .all()
-    )
+    """
+    Apply a discount to all books by the given publisher.
+
+    Args:
+        db: SQLAlchemy Session
+        publisher: Publisher name
+        discount: Discount percentage (e.g., 10 for 10%)
+    """
+    if discount < 0 or discount > 100:
+        raise ValueError("Discount must be between 0 and 100")
+
+    # Convert discount percentage to Decimal once
+    discount_factor = Decimal(1) - Decimal(discount) / Decimal(100)
+
+    # Get all books by the publisher
+    books = db.query(Book).filter(Book.publisher == publisher).all()
 
     for book in books:
-        book.price = book.price * (1 - discount / 100)
+        # Multiply Decimal price by Decimal discount factor
+        book.price = book.price * discount_factor
 
     db.commit()
 

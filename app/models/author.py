@@ -1,0 +1,14 @@
+from sqlalchemy import Column, Integer, String, Text
+from sqlalchemy.orm import relationship
+from .database import Base
+
+class Author(Base):
+    __tablename__ = "authors"
+
+    id = Column(Integer, primary_key=True)
+    first_name = Column(String(100), nullable=False)
+    last_name = Column(String(100), nullable=False)
+    bibliography = Column(Text)
+    publisher = Column(Text)
+
+    book = relationship("Book", back_populates="author")
