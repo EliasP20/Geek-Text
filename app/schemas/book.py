@@ -15,5 +15,7 @@ class BookResponse(BaseModel):
     copies_sold: int
     author_id: Optional[int]
 
+    average_rating: Optional[float] = None
+
     class Config:
         orm_mode = True

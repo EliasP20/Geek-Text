@@ -6,11 +6,11 @@ from app.services import book_service
 
 router = APIRouter(prefix="/books", tags=["Books"])
 
-@router.get("/genre/{genre}", response_model=list[BookResponse])
+@router.get("/genre/{genre}", response_model=list[BookResponse], response_model_exclude_none=True)
 def browse_by_genre(genre: str, db: Session = Depends(get_db)):
     return book_service.get_books_by_genre(db, genre)
 
-@router.get("/top-sellers", response_model=list[BookResponse])
+@router.get("/top-sellers", response_model=list[BookResponse], response_model_exclude_none=True)
 def top_sellers(db: Session = Depends(get_db)):
     return book_service.get_top_sellers(db)
 
