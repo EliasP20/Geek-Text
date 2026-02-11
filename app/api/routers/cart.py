@@ -20,8 +20,17 @@ def list_cart_items(user_id: int, db: Session = Depends(get_db)):
     result = db.execute(query, {"uid": user_id}).fetchone()
     user_name = result[0] if result else "Unknown User"
 
+    aggregated_items = {}
+    for item in cart.items:
+        if item.book_id in aggregated_items:
+            # Add to the existing quantity instead of making a new row, accounts for duplicate database entries
+            aggregated_items[item.book_id].quantity += item.quantity
+        else:
+            # First time seeing this book, add it to our dictionary
+            aggregated_items[item.book_id] = item
+
     return {
         "user_id": user_id,
         "user_name": user_name,
-        "items": cart.items
+        "items": list(aggregated_items.values())
         }

@@ -7,7 +7,10 @@ class ShoppingCart(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, unique=True)
     
-    items = relationship("CartItem", back_populates="cart", cascade="all, delete-orphan")
+    items = relationship("CartItem", 
+                         back_populates="cart", 
+                         cascade="all, delete-orphan", 
+                         order_by="desc(CartItem.cart_id)")
 
 class CartItem(Base):
     __tablename__ = "cart_items"
