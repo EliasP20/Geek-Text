@@ -20,7 +20,6 @@ def list_cart_items(user_id: int, db: Session = Depends(get_db)):
     result = db.execute(query, {"uid": user_id}).fetchone()
     user_name = result[0] if result else "Unknown User"
 
-    # Return the items list, not the cart object
     return {
         "user_id": user_id,
         "user_name": user_name,
