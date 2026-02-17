@@ -1,32 +1,24 @@
 from fastapi import FastAPI
 from app.database import Base, engine
+from app.api.routers.users import router as users_router
+from app.api.routers.ratings import router as ratings_router
 
-# import models
-import app.models.rating
-import app.models.comment
-
-# import routers
-from app.api.routers import ratings
-
-# create app
 app = FastAPI(title="Geek Text API")
 
-# connect routers
-app.include_router(ratings.router)
+app.include_router(users_router)
+app.include_router(ratings_router)
 
-# ensure detected tables
 Base.metadata.create_all(bind=engine)
-
 
 @app.get("/")
 def root():
     return {"message": "Geek Text API running"}
 
-
-@app.get("/test-db")
-def test_db():
+@app.get("/health")
+def health():
     try:
         with engine.connect() as conn:
-            return {"db": "connected"}
+            return {"status": "ok"}
     except Exception as e:
-        return {"db": "failed", "error": str(e)}
+        return {"status": "failed", "error": str(e)}
+
