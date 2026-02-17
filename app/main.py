@@ -1,16 +1,11 @@
 from fastapi import FastAPI
 from app.database import Base, engine
+from app.api.routers import wishlist_router
 
-# import routers
-from app.api.routers import wishlist
-
-# create app
 app = FastAPI(title="Geek Text API")
 
-# connect router
-app.include_router(wishlist.router)
+app.include_router(wishlist_router.router)
 
-# ensure detected tables
 Base.metadata.create_all(bind=engine)
 
 
@@ -19,10 +14,10 @@ def root():
     return {"message": "Geek Text API running"}
 
 
-@app.get("/test-db")
+@app.get("/health")
 def test_db():
     try:
         with engine.connect() as conn:
-            return {"db": "connected"}
+            return {"status": "ok"}
     except Exception as e:
-        return {"db": "failed", "error": str(e)}
+        return {"status": "failed", "error": str(e)}
