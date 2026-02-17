@@ -1,3 +1,4 @@
+from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, String
 from app.database import Base
 
@@ -10,3 +11,9 @@ class User(Base):
     name = Column(String(100))
     email = Column(String(100))
     address = Column(String(255))
+    
+    credit_cards = relationship(
+        "CreditCard",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )

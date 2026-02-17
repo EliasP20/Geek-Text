@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
-
+from fastapi import Response
+from app.schemas.credit_card import CreditCardCreate
+from app.services import credit_cards_service
 from app.database import get_db
 from app.schemas.user import UserResponse, UserCreate, UserUpdate
 from app.services import users_service
@@ -33,3 +35,12 @@ def update_user(username: str, updates: UserUpdate, db: Session = Depends(get_db
 
     users_service.update_user(db, user, updates)
     return Response(status_code=204)
+
+
+@router.post("/users/{username}/credit-cards", status_code=201)
+def add_credit_card(username: str, card: CreditCardCreate, db: Session = Depends(get_db)):
+    ok = credit_cards_service.create_credit_card_for_user(db, username, card)
+    if not ok:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return Response(status_code=201)
