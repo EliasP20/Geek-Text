@@ -1,6 +1,8 @@
 from sqlalchemy import Column, Integer, ForeignKey, CheckConstraint
 from sqlalchemy.orm import relationship
-from .database import Base
+
+from app.database import Base
+
 
 class Rating(Base):
     __tablename__ = "ratings"
