@@ -44,3 +44,11 @@ def add_credit_card(username: str, card: CreditCardCreate, db: Session = Depends
         raise HTTPException(status_code=404, detail="User not found")
 
     return Response(status_code=201)
+
+
+@router.get("/users/id/{user_id}", response_model=UserResponse)
+def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
+    user = users_service.get_user_by_id(db, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
