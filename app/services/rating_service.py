@@ -2,6 +2,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from app.models.rating import Rating
 from app.models.comment import Comment
+from app.services.users_service import get_user_by_id
+
 
 """
 rating_service.py
@@ -10,6 +12,9 @@ Contains all business logic related to ratings and comments.
 Routers should call these functions instead of directly querying the database.
 """
 
+USER_NOT_FOUND = "USER_NOT_FOUND"
+INVALID_RATING = "INVALID_RATING"
+EMPTY_TEXT = "EMPTY_TEXT"
 
 def create_rating(db: Session, user_id: int, book_id: int, rating_value: int):
     """
@@ -24,6 +29,17 @@ def create_rating(db: Session, user_id: int, book_id: int, rating_value: int):
         Returns:
             Newly created Rating object
     """
+    
+    ##Check if User exists
+    user = get_user_by_id(db, user_id)
+    if not user:
+        raise ValueError(USER_NOT_FOUND)
+    
+     ##Check if the rating is within the range:
+    if rating_value < 0 or rating_value > 5:
+        raise ValueError (INVALID_RATING)
+    
+
     rating = Rating(user_id=user_id, book_id=book_id, rating=rating_value)
     db.add(rating)
     db.commit()
@@ -45,6 +61,15 @@ def create_comment(db: Session, user_id: int, book_id: int, text: str):
         Returns:
             Newly created Comment object
     """
+     ##Check if User exists
+    user = get_user_by_id(db, user_id)
+    if not user:
+        raise ValueError(USER_NOT_FOUND)
+    
+    ##Check if text is not empty
+    if not text or text.strip() == "":
+        raise ValueError(EMPTY_TEXT)
+
     comment = Comment(user_id=user_id, book_id=book_id, comment=text)
     db.add(comment)
     db.commit()
@@ -81,3 +106,5 @@ def get_average_rating(db: Session, book_id: int):
     """
     avg = db.query(func.avg(Rating.rating)).filter(Rating.book_id == book_id).scalar()
     return round(avg, 2) if avg else 0
+
+
