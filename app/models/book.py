@@ -25,6 +25,6 @@ class Book(Base):
         nullable=True
     )
 
-    author = relationship("Author", back_populates="book")
+    author = relationship("Author", back_populates="books")
 
     ratings = relationship("Rating", back_populates="book")

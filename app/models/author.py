@@ -13,4 +13,4 @@ class Author(Base):
     bibliography = Column(Text)
     publisher = Column(Text)
 
-    book = relationship("Book", back_populates="author")
+    books = relationship("Book", back_populates="author")
