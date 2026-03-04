@@ -64,3 +64,4 @@ def get_books_by_min_rating(db, min_rating: float):
         books.append(book)
 
     return books
+
