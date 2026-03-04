@@ -1,13 +1,10 @@
-from sqlalchemy import Column, Integer, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, ForeignKey, Text, DateTime
 from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship
-from datetime import datetime
-
 from app.database import Base
 
 
-class Rating(Base):
-    __tablename__ = "ratings"
+class Comment(Base):
+    __tablename__ = "comments"
 
     id = Column(Integer, primary_key=True, index=True)
 
@@ -23,14 +20,9 @@ class Rating(Base):
         nullable=False
     )
 
-    rating = Column(Integer, nullable=False)
+    comment = Column(Text, nullable=False)
 
     created_at = Column(
         DateTime(timezone=True),
         server_default=func.now()
-    )
-
-    book = relationship(
-        "Book",
-        back_populates="ratings"
     )
