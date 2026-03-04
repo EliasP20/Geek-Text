@@ -5,17 +5,10 @@ from typing import Optional
 
 class BookResponse(BaseModel):
     id: int
-    isbn: str
     title: str
-    description: Optional[str]
     price: Decimal
     genre: Optional[str]
     publisher: Optional[str]
-    year_published: Optional[int]
-    copies_sold: int
-    author_id: Optional[int]
-
-    average_rating: Optional[float] = None
 
     class Config:
         orm_mode = True
