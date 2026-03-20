@@ -1,6 +1,7 @@
 from decimal import Decimal
 from sqlalchemy.orm import Session
-from app.models.cart import ShoppingCart
+from app.models.cart import ShoppingCart, CartItem
+from app.models.book import Book
 
 def get_user_cart(db: Session, user_id: int):
     # Stores the first cart found in the database into 'cart' variable
@@ -23,3 +24,30 @@ def calculate_subtotal(db: Session, user_id: int):
     for item in cart.items:
         subtotal += item.book.price * item.quantity
     return subtotal
+
+
+def add_item_to_cart(db: Session, user_id: int, book_id: int):
+    # Retrieves the user's cart
+    cart = get_user_cart(db, user_id)
+
+    # Finds the desired book to add using its book ID
+    book = db.query(Book).filter(Book.id == book_id).first()
+    if not book:
+        return False
+
+    # Check if the cart already has the desired book inside
+    existing_item = db.query(CartItem).filter(
+        CartItem.cart_id == cart.id, 
+        CartItem.book_id == book_id
+    ).first()
+
+    # If cart already has desired book, add to its quantity, else create a new entry in the database for that book
+    if existing_item:
+        existing_item.quantity += 1
+    else:
+        new_item = CartItem(cart_id=cart.id, book_id=book_id, quantity=1)
+        db.add(new_item)
+
+    # Make changes to the database
+    db.commit()
+    return True
