@@ -48,3 +48,14 @@ def add_to_cart(user_id: int, book_id: int, db: Session = Depends(get_db)):
         return {"message": "Failed to add book to cart."}
         
     return {"message": "Book successfully added to cart!"}
+
+
+# Given a book ID and user ID, delete the book with the associated ID from the user’s shopping cart.
+@router.delete("/remove", status_code=status.HTTP_200_OK)
+def remove_from_cart(user_id: int, book_id: int, db: Session = Depends(get_db)):
+    success = cart_service.remove_item_from_cart(db, user_id, book_id)
+    
+    if not success:
+        return {"message": "Item not found in cart or user has no cart."}
+        
+    return {"message": "Book successfully removed from cart!"}

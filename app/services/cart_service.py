@@ -51,3 +51,29 @@ def add_item_to_cart(db: Session, user_id: int, book_id: int):
     # Make changes to the database
     db.commit()
     return True
+
+
+def remove_item_from_cart(db: Session, user_id: int, book_id: int):
+    # Find the user's cart
+    cart = db.query(ShoppingCart).filter(ShoppingCart.id == user_id).first()
+    if not cart:
+        return False
+
+    # Find the specific item entry
+    existing_item = db.query(CartItem).filter(
+        CartItem.cart_id == cart.id,
+        CartItem.book_id == book_id
+    ).first()
+
+    if existing_item:
+        if existing_item.quantity > 1:
+            # If more than one exists, just decrement the quantity
+            existing_item.quantity -= 1
+        else:
+            # If only one is left, remove the entry entirely
+            db.delete(existing_item)
+        
+        db.commit()
+        return True
+    
+    return False
