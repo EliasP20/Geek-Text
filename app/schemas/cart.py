@@ -19,3 +19,11 @@ class CartResponse(BaseModel):
 class CartSubtotalResponse(BaseModel):
     user_id: int
     subtotal: float
+
+class CartItemCreate(BaseModel):
+    user_id: int
+    book_id: int
+    quantity: int = 1
+
+    class Config:
+        from_attributes = True

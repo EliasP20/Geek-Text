@@ -6,6 +6,8 @@ from app.models import Book, Author
 from sqlalchemy import func
 from app.models.rating import Rating
 
+from app.schemas.book import BookCreate
+
 
 def get_books_by_genre(db: Session, genre: str):
     return (
@@ -65,3 +67,22 @@ def get_books_by_min_rating(db, min_rating: float):
 
     return books
 
+def create_book(db: Session, book: BookCreate):
+    book = Book(
+        isbn=book.isbn,
+        title=book.title,
+        description=book.description,
+        price=book.price,
+        genre=book.genre,
+        publisher=book.publisher,
+        year_published=book.year_published,
+        copies_sold=book.copies_sold,
+        author_id=book.author_id,
+    )
+    db.add(book)
+    db.commit()
+    db.refresh(book)
+    return book
+
+def get_book_by_isbn(db: Session, isbn: str):
+    return db.query(Book).filter(Book.isbn == isbn).first()
