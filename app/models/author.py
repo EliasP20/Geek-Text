@@ -10,7 +10,7 @@ class Author(Base):
     id = Column(Integer, primary_key=True)
     first_name = Column(String(100), nullable=False)
     last_name = Column(String(100), nullable=False)
-    bibliography = Column(Text)
+    biography = Column(Text)
     publisher = Column(Text)
 
     books = relationship("Book", back_populates="author")
