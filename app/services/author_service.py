@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.models import Author
+from app.models import Author, Book
 
 from sqlalchemy import func
 
@@ -17,3 +17,5 @@ def create_author(db: Session, author: AuthorCreate):
     db.refresh(author)
     return author
  
+def get_books_by_author_id(db: Session, author_id: int):
+    return db.query(Book).filter(Book.author_id == author_id).all()
