@@ -68,7 +68,7 @@ def discount_books_by_publisher(db: Session, publisher: str, discount: float):
     books = db.query(Book).filter(Book.publisher == publisher).all()
 
     for book in books:
-        book.price = book.price * discount_factor
+        book.price = book.price * discount_factor # type: ignore
 
     db.commit()
 
@@ -103,7 +103,7 @@ def get_books_by_min_rating(db: Session, min_rating: float):
     return books
 
 def create_book(db: Session, book: BookCreate):
-    book = Book(
+    book = BookCreate(
         isbn=book.isbn,
         title=book.title,
         description=book.description,
