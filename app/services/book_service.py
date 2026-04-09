@@ -67,6 +67,7 @@ def get_books_by_min_rating(db, min_rating: float):
 
     return books
 
+# Insert a new book record into the database
 def create_book(db: Session, book: BookCreate):
     book = Book(
         isbn=book.isbn,
@@ -84,5 +85,6 @@ def create_book(db: Session, book: BookCreate):
     db.refresh(book)
     return book
 
+# Fetch a book from the database by its ISBN
 def get_book_by_isbn(db: Session, isbn: str):
     return db.query(Book).filter(Book.isbn == isbn).first()
