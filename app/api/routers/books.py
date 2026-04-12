@@ -27,10 +27,12 @@ def discount_books(
 def browse_by_rating(min_rating: float, db: Session = Depends(get_db)):
     return book_service.get_books_by_min_rating(db, min_rating)
 
+# Create a new book and save it to the database
 @router.post("/create-book", response_model=BookResponse)
 def create_book(book: BookCreate, db: Session = Depends(get_db)):
     return book_service.create_book(db, book)
 
+# Retrieve a book using its ISBN
 @router.get("/{isbn}", response_model=BookResponse)
 def get_book(isbn: str, db: Session = Depends(get_db)):
     return book_service.get_book_by_isbn(db, isbn)
